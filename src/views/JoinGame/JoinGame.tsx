@@ -28,23 +28,6 @@ type Props = {
   setCurrentPlayerName: Dispatch<SetStateAction<string>>;
 };
 
-// Temporary functions to quickly get random usernames
-const generateRandomNumber = (min = 1, max = 20) =>
-  // eslint-disable-next-line implicit-arrow-linebreak
-  Math.floor(Math.random() * (max - min + 1) + min);
-
-const generateName = () => {
-  // 65 - 90
-  let name = '';
-  const numLetters = generateRandomNumber(15, 20);
-  for (let i = 0; i < numLetters; i += 1) {
-    const letter = generateRandomNumber(65, 90);
-    name += String.fromCharCode(letter);
-  }
-  return name;
-};
-// ---- End Temporary Functions
-
 function JoinGame({
   handleJoin,
   iconId,
@@ -54,10 +37,10 @@ function JoinGame({
   setCurrentPlayerName,
 }: Props) {
   /** The name of the player */
-  const [playerName, setPlayerName] = useState(generateName());
+  const [playerName, setPlayerName] = useState('');
 
   /** The room the player will join */
-  const [room, setRoom] = useState(generateName());
+  const [room, setRoom] = useState('');
 
   /**
    * Validates and sets the players name from an HTML input.
@@ -65,8 +48,8 @@ function JoinGame({
    */
   const changePlayerName = (event: FormEvent<HTMLInputElement>): void => {
     const { value } = event.currentTarget as HTMLInputElement;
-    if (value.match(/^[A-Za-z0-9]+$/)) {
-      setPlayerName(value);
+    if (value.match(/^[A-Za-z0-9]+$/) && value.length < 16) {
+      setPlayerName(value.toUpperCase());
     }
     if (value === '') {
       setPlayerName('');
@@ -79,9 +62,11 @@ function JoinGame({
    */
   const changeRoom = (event: FormEvent<HTMLInputElement>): void => {
     const { value } = event.currentTarget as HTMLInputElement;
-    const _value = value.toUpperCase();
-    if (_value.match(/^[A-Za-z0-9]+$/)) {
-      setRoom(_value);
+    if (value.match(/^[A-Za-z0-9]+$/) && value.length < 16) {
+      setRoom(value.toUpperCase());
+    }
+    if (value === '') {
+      setRoom('');
     }
   };
 
@@ -95,6 +80,7 @@ function JoinGame({
   };
 
   useEffect(() => {
+    // Resetting the player's name when they are back on the Join view
     setCurrentPlayerName('');
   }, [setCurrentPlayerName]);
 
@@ -111,6 +97,7 @@ function JoinGame({
           required
           onChange={changePlayerName}
           value={playerName}
+          placeholder="YOURNAME"
         />
         <Input
           label="Room"
@@ -119,6 +106,7 @@ function JoinGame({
           required
           onChange={changeRoom}
           value={room}
+          placeholder="ROOMNAME"
         />
         <PlayerSelector
           iconId={iconId}

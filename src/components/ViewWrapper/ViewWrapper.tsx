@@ -10,7 +10,11 @@ type Props = {
  * handled in a single source.
  */
 function ViewWrapper({ backgroundColor = '#fff', children }: Props) {
-  return <S.Wrapper backgroundColor={backgroundColor}>{children}</S.Wrapper>;
+  return (
+    <S.Wrapper backgroundColor={backgroundColor}>
+      <S.Container>{children}</S.Container>
+    </S.Wrapper>
+  );
 }
 
 export default ViewWrapper;
