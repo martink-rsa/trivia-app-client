@@ -1,53 +1,5 @@
-# Trivia App
+### Notes and To-Dos:
 
-## Info
-
-The Trivia app is a Trivia game where multiple individuals can play a Trivia game together. It makes use of socket.io/websockets for communication.
-
----
-
-## Design
-
-The design is viewable at: https://www.figma.com/file/UEcKqOJsedP0oq60JypDhV/Main-design
-
-## Tasks
-
-Tasks are available at: https://trello.com/b/EEXohng4/trivia-app
-
----
-
-## Client
-
-The client uses React, Typescript, and styled-components.
-
-### Install
-
-`yarn`
-
-### To run
-
-`yarn start`
-
-### Tests
-
-`yarn test`
-
----
-
-## Server
-
-The server uses Node.js and socket.io
-
-### Install
-
-`yarn`
-
-### To run:
-
-Start a local database: `yarn startdb` (Do not close this window)
-
-Start the dev server: `yarn dev` (Do not close this window)
-
-### Tests
-
-`yarn test`
+- Remove dotenv if it is not being used, which it currently isn't
+- Create better looking input controls
+- The Answer component is currently using conditional values in the styled-components. This component is meant to get reworked to include an animation I have in mind. When this takes place, it should use native CSS to handle the selection option instead of the conditional values it currently uses. The current method leads to classes switching in and out which is most likely not as efficient as having it styled by native CSS.
