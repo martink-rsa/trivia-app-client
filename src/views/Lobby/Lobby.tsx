@@ -19,6 +19,7 @@ type Props = {
 function Lobby({ players, topics, onSubmit }: Props) {
   const [topicSelected, setTopicSelected] = useState(topics[0].id);
   const [numQuestions, setNumQuestions] = useState(3);
+  const [questionsDuration, setQuestionsDuration] = useState(10);
 
   /**
    * Submits the user's details
@@ -35,6 +36,14 @@ function Lobby({ players, topics, onSubmit }: Props) {
    */
   const changeNumQuestions = (event: ChangeEvent<HTMLInputElement>) => {
     setNumQuestions(parseInt(event.currentTarget.value, 10));
+  };
+
+  /**
+   * Changes the number of questions for the Trivia
+   * @param event Mouse event on the element
+   */
+  const changeQuestionsDuration = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuestionsDuration(parseInt(event.currentTarget.value, 10));
   };
 
   /**
@@ -56,7 +65,7 @@ function Lobby({ players, topics, onSubmit }: Props) {
       </MainContainer>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="numQuestions">Questions:</label>
+          <label htmlFor="numQuestions">Number of Questions:</label>
           <S.Input
             type="number"
             id="numQuestions"
@@ -64,6 +73,15 @@ function Lobby({ players, topics, onSubmit }: Props) {
             max="50"
             value={numQuestions}
             onChange={changeNumQuestions}
+          />
+          <label htmlFor="questionsDuration">Question Duration:</label>
+          <S.Input
+            type="number"
+            id="questionsDuration"
+            min="1"
+            max="20"
+            value={questionsDuration}
+            onChange={changeQuestionsDuration}
           />
         </div>
         <S.Select onChange={changeTopics}>
