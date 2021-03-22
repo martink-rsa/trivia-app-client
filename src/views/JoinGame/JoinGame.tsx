@@ -1,4 +1,10 @@
-import { useState, FormEvent, Dispatch, SetStateAction } from 'react';
+import {
+  useState,
+  useEffect,
+  FormEvent,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 
 import ViewWrapper from '../../components/ViewWrapper/ViewWrapper';
 import MainContainer from '../../components/MainContainer/MainContainer';
@@ -19,6 +25,7 @@ type Props = {
   setIconId: Dispatch<SetStateAction<number>>;
   colorId: number;
   setColorId: Dispatch<SetStateAction<number>>;
+  setCurrentPlayerName: Dispatch<SetStateAction<string>>;
 };
 
 // Temporary functions to quickly get random usernames
@@ -44,6 +51,7 @@ function JoinGame({
   setIconId,
   colorId,
   setColorId,
+  setCurrentPlayerName,
 }: Props) {
   /** The name of the player */
   const [playerName, setPlayerName] = useState(generateName());
@@ -85,6 +93,10 @@ function JoinGame({
     event.preventDefault();
     handleJoin(playerName, room, iconId, colorId);
   };
+
+  useEffect(() => {
+    setCurrentPlayerName('');
+  }, [setCurrentPlayerName]);
 
   return (
     <ViewWrapper backgroundColor="primary">

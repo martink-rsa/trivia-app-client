@@ -61,8 +61,6 @@ function Game({ question, submitAnswer }: Props) {
     }));
   };
 
-  console.log(addKeyIds(question.answers));
-
   return (
     <ViewWrapper>
       {/* {question.questionNumber} */}

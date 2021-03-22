@@ -40,9 +40,12 @@ type Question = {
 };
 
 function App() {
+  const [currentPlayerName, setCurrentPlayerName] = useState('');
+
   /** The state of the game that determines what view/screen to be showing */
   const [gameState, setGameState] = useState<GameStates>(GameStates.JOIN);
 
+  /** A list of topics that is available to choose from */
   const [topics, setTopics] = useState([]);
 
   /** Players that are in the room which is used to display a player list */
@@ -74,30 +77,21 @@ function App() {
       console.log(data);
     });
     socket.on('updateGameState', (data: GameStates) => {
-      console.log(
-        'Server emitted: updateGameState - Updating the state of the game',
-        data,
-      );
       handleGameState(data);
     });
     socket.on('updateTopics', (data: any) => {
-      console.log('Server emitted: updateTopics - Updating topics list');
       setTopics(data);
     });
     socket.on('updatePlayers', (data: any) => {
-      console.log('Server emitted: updatePlayers - Updating player list');
       setPlayers(data);
     });
     socket.on('updateQuestion', (data: any) => {
-      console.log(data);
       setQuestion(data);
     });
     socket.on('updatePlayersInProgress', (data: any) => {
-      console.log(data);
       setPlayersInProgress(data);
     });
     socket.on('updateScore', (data: any) => {
-      console.log(data);
       setScore(data);
     });
     socket.on('testMsg', (data: any) => {
@@ -107,14 +101,19 @@ function App() {
 
   /**
    * Used to trigger the game from the lobby
+   * @param selectedTopic The topic for the questions
    * @param numberQuestions Number of questions for the trivia
+   * @param questionsDuration The duration for the timer for each question
    * @param subject The subject/scope of the questions e.g. javascript
    */
-  const triggerGameStart = (numberQuestions: number, selectedTopic: string) => {
-    console.log('Client emit: triggerGameStart - Attempt to start the game');
+  const triggerGameStart = (
+    selectedTopic: string,
+    numberQuestions: number,
+    questionsDuration: number,
+  ) => {
     socket.emit(
       'gameStart',
-      { numberQuestions, selectedTopic },
+      { selectedTopic, numberQuestions, questionsDuration },
       (callback: any) => {
         console.log('Callback: gameStart - ', callback);
       },
@@ -126,7 +125,6 @@ function App() {
    * @param data
    */
   const handleGameState = (newGameState: any) => {
-    console.log('handleGameState: Updating game state');
     setGameState(newGameState);
   };
 
@@ -136,7 +134,6 @@ function App() {
    * @param index
    */
   const submitAnswer = (index: any) => {
-    console.log('Client emit: playerAnswer - Submitting an answer');
     socket.emit('playerAnswer', { index }, (callback: any) => {
       //
     });
@@ -154,27 +151,24 @@ function App() {
     iconId: number,
     colorId: number,
   ) => {
-    console.log(`Join attempt: ${username} -> ${room}`);
     socket.emit(
       'attemptJoin',
       { username, room, iconId, colorId },
-      (callback: any) => {
-        console.log('Callback: attemptJoin - ', callback);
+      (response: any) => {
+        if (response.status === 200) {
+          setCurrentPlayerName(username);
+        }
       },
     );
   };
 
   const handleMainMenu = () => {
-    console.log('handleMainMenu');
     socket.emit('backToJoinGame', (callback: any) => {
       console.log('Callback: backToJoinGame', callback);
     });
   };
 
   if (gameState === GameStates.JOIN) {
-    // return <Score scores={mockScore} />;
-    // return <Waiting playersInProgress={mockPlayersInProgress} />;
-
     return (
       <JoinGame
         handleJoin={attemptJoin}
@@ -182,11 +176,17 @@ function App() {
         setIconId={setIconId}
         colorId={colorId}
         setColorId={setColorId}
+        setCurrentPlayerName={setCurrentPlayerName}
       />
     );
   } else if (gameState === GameStates.LOBBY) {
     return (
-      <Lobby players={players} onSubmit={triggerGameStart} topics={topics} />
+      <Lobby
+        players={players}
+        onSubmit={triggerGameStart}
+        currentPlayerName={currentPlayerName}
+        topics={topics}
+      />
     );
   } else if (gameState === GameStates.GAME) {
     return <Game question={question} submitAnswer={submitAnswer} />;

@@ -19,4 +19,9 @@ export const IconContainer = styled.div<IconContainerProps>`
     height: 70px;
     width: 60px;
   }
+
+  @media (max-width: 360px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
