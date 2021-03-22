@@ -61,8 +61,6 @@ function Game({ question, submitAnswer }: Props) {
     }));
   };
 
-  console.log(addKeyIds(question.answers));
-
   return (
     <ViewWrapper>
       {/* {question.questionNumber} */}
@@ -79,11 +77,12 @@ function Game({ question, submitAnswer }: Props) {
               question.answers,
             ).map((answer: { text: string; keyId: number }, index: number) => (
               <Answer
-                key={answer.keyId}
+                key={`question-key-${answer.keyId}`}
                 index={index}
                 text={answer.text}
                 isSelected={index.toString() === playerAnswer}
                 setPlayerAnswer={setPlayerAnswer}
+                round={question.questionNumber}
               />
             ))}
         </S.AnswersContainer>

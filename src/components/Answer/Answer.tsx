@@ -6,16 +6,16 @@ type Props = {
   index: number;
   text: string;
   isSelected: boolean;
+  round: number;
   setPlayerAnswer: (index: string) => void;
 };
 
 /** The Answer component that is used when a user is selecting an
  * answer in the trivia
  */
-function Answer({ index, text, isSelected, setPlayerAnswer }: Props) {
+function Answer({ index, text, isSelected, round, setPlayerAnswer }: Props) {
   const handleChoice = (event: any) => {
     const choice = event.target.value;
-    console.log('handleChoice', choice);
     setPlayerAnswer(choice);
   };
 
@@ -24,9 +24,10 @@ function Answer({ index, text, isSelected, setPlayerAnswer }: Props) {
       <S.Input
         type="radio"
         id={`trivia-answer-${index}`}
-        name="trivia-answer"
+        name={`trivia-answer-round-${round}}`}
         value={index}
         onChange={handleChoice}
+        checked={isSelected}
       />
       <S.Label htmlFor={`trivia-answer-${index}`} isSelected={isSelected}>
         <S.Content>
