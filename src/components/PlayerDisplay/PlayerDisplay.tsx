@@ -12,7 +12,6 @@ type Props = {
 function PlayerDisplay({
   player: { username, colorId, iconId, isAdmin },
 }: Props) {
-  console.log(isAdmin);
   return (
     <S.Wrapper>
       <S.IconWrapper>
