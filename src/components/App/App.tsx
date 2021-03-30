@@ -13,7 +13,7 @@ import Player from '../../shared/Player';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { mockPlayersInProgress, mockScore } from '../../mockData/mockData';
 
-const SERVER = 'http://localhost:3001';
+const SERVER = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001';
 
 let socket: any;
 
